@@ -1,0 +1,20 @@
+# machine name, one section per machine
+# this machine name is the same as is used as command line argument to
+# the subcommands, so for example `wksl wake example` would find the
+# section `example`in this file and use the values for configuration.
+#
+# Note that this name is arbitrary, it does not have to be
+# the machine's network name
+[example]
+
+# MAC address of machine, required
+mac_address = "01:02:03:04:05:06"
+
+# WoL broadcast port number, optional (default: 9)
+port = 9
+
+# WoL broadcast address, optional (default: "255.255.255.255")
+broadcast_address = "255.255.255.255"
+
+# The command to run to put the machine to sleep, required
+sleep_command = { cmd = "my_exe", args = ["the", "args", "to", "my_exe"]}

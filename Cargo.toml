@@ -1,0 +1,16 @@
+[package]
+name = "wksl"
+authors = ["Henrik Ravn <hravnx@gmail.com>"]
+description = "A small utility to wake computer up or put them to sleep over the local network"
+version = "0.2.1"
+edition = "2021"
+
+[dependencies]
+clap = "2"
+mac_address = { version = "1", features = ["serde"] }
+serde = "1"
+serde_derive = "1"
+thiserror = "1"
+toml = "0.5"
+shellexpand = "2"
+
