@@ -33,7 +33,7 @@ fn run_app(matches: ArgMatches) -> Result<(), RunError> {
         let port = config.port.unwrap_or(DEFAULT_WOL_PORT);
         let cast_to = config
             .broadcast_address
-            .unwrap_or(DEFAULT_BROADCAST.into());
+            .unwrap_or_else(|| DEFAULT_BROADCAST.into());
         return wake::send_packet(&packet, cast_to, port)
             .map(|_| println!("done."));
     }
