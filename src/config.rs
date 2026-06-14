@@ -68,5 +68,5 @@ pub fn read_config(path: &str, section_name: &str) -> Result<WOLConfig, RunError
     sections
         .get(section_name)
         .ok_or_else(|| RunError::unknown_section(section_name))
-        .map(|c| c.clone())
+        .cloned()
 }
