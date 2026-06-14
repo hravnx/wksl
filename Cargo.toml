@@ -2,7 +2,7 @@
 name = "wksl"
 authors = ["Henrik Ravn <hravnx@gmail.com>"]
 description = "A small utility to wake computer up or put them to sleep over the local network"
-version = "0.2.1"
+version = "0.3.0"
 edition = "2021"
 
 [dependencies]

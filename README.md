@@ -33,7 +33,35 @@ on the command line by giving the `-c` or `--config-path` argument, like so:
 
     $ wksl --config-path ./my/path/to/wksl.toml <... rest of your args here ...> 
 
-Look at the [example](example-config.toml) file in the root of the repo for details. 
+Look at the [example](example-config.toml) file in the root of the repo for details.
+
+## Commands
+
+### `wksl list`
+
+Prints the resolved config file path and all machines defined in it. If a
+machine has a `description` field, it is printed next to the machine name.
+
+    $ wksl list
+
+### `wksl wake <machine>`
+
+Broadcasts a Wake-on-LAN packet for the named machine. The machine name must
+match a section in the config file.
+
+    $ wksl wake desktop
+
+### `wksl sleep <machine>`
+
+Runs the configured sleep command for the named machine. The machine must have
+a `sleep_command` entry in the config file.
+
+    $ wksl sleep desktop
+
+All commands accept `-c` or `--config-path` before the command name to select a
+custom config file.
+
+    $ wksl --config-path ./wksl.toml list
 
 ## License
 
