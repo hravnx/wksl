@@ -7,6 +7,10 @@
 # the machine's network name
 [example]
 
+# Description of the machine, optional
+# Printed by the `list` command
+# description = "Example machine"
+
 # MAC address of machine, required
 mac_address = "01:02:03:04:05:06"
 

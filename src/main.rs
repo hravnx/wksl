@@ -47,6 +47,9 @@ enum Commands {
         /// Selects the machine to use
         machine: String,
     },
+
+    /// Lists the configured machines
+    List,
 }
 
 fn run_app(args: Cli) -> Result<(), RunError> {
@@ -83,9 +86,25 @@ fn run_app(args: Cli) -> Result<(), RunError> {
                 Err(RunError::NoSleepCommand)
             }
         }
+        Commands::List => {
+            let (config_path, configs) = config::read_configs(&args.config_path)?;
+            let mut machines: Vec<_> = configs.iter().collect();
+            machines.sort_by_key(|(name, _)| *name);
+
+            println!("Config: {}", config_path.display());
+            println!("Machines:");
+            for (machine, config) in machines {
+                if let Some(description) = &config.description {
+                    println!("  {machine} - {description}");
+                } else {
+                    println!("  {machine}");
+                }
+            }
+
+            Ok(())
+        }
     }
 }
-
 
 fn main() {
     // match command line arguments

@@ -1,22 +1,22 @@
-use std::{collections::HashMap, net::IpAddr};
+use std::{collections::HashMap, net::IpAddr, path::PathBuf};
 
 use mac_address::MacAddress;
 use serde_derive::Deserialize;
 use thiserror::Error;
 
-
 #[derive(Debug, Deserialize, Clone)]
 pub struct SleepCommand {
     pub cmd: String,
-    pub args: Vec<String>
+    pub args: Vec<String>,
 }
 
 #[derive(Debug, Deserialize, Clone)]
 pub struct WOLConfig {
+    pub description: Option<String>,
     pub mac_address: MacAddress,
     pub port: Option<u16>,
     pub broadcast_address: Option<IpAddr>,
-    pub sleep_command: Option<SleepCommand>
+    pub sleep_command: Option<SleepCommand>,
 }
 
 #[derive(Error, Debug)]
@@ -49,15 +49,24 @@ impl RunError {
     }
 }
 
+fn resolve_config_path(path: &str) -> Result<PathBuf, RunError> {
+    let expanded_path = shellexpand::full(path)?;
+    Ok(std::fs::canonicalize(&*expanded_path)?)
+}
+
+/// Load a toml file from `path` and return the resolved path and all configured machines.
+pub fn read_configs(path: &str) -> Result<(PathBuf, HashMap<String, WOLConfig>), RunError> {
+    let real_path = resolve_config_path(path)?;
+    let content = std::fs::read_to_string(&real_path)?;
+    let sections: HashMap<String, WOLConfig> = toml::from_str(&content)?;
+    Ok((real_path, sections))
+}
 
 /// Load a toml file from `path` and extract the section `section_name` as a [WOLConfig] instance
 pub fn read_config(path: &str, section_name: &str) -> Result<WOLConfig, RunError> {
-    let real_path = shellexpand::full(path)?;
-    let content = std::fs::read_to_string(&*real_path)?;
-    let sections: HashMap<String, WOLConfig> = toml::from_str(&content)?;
+    let (_, sections) = read_configs(path)?;
     sections
         .get(section_name)
         .ok_or_else(|| RunError::unknown_section(section_name))
         .map(|c| c.clone())
 }
-
