@@ -6,7 +6,7 @@ version = "0.2.1"
 edition = "2021"
 
 [dependencies]
-clap = "2"
+clap = { version = "4", features = ["derive"] }
 mac_address = { version = "1", features = ["serde"] }
 serde = "1"
 serde_derive = "1"
